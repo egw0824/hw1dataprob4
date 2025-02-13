@@ -1,30 +1,44 @@
-public class Check{
-//Method to use in recursive method to check whether a char is a consonant
-public static boolean isConsonant(char c) { 
- c = Character.toLowerCase(c);
-return !(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u'); 
-}
-//Main recursive method
-public static int consonantCheck(String consonant, String s, int index){
-//consonant is a string that contains "(" we will use to print the final consonants, s main string
-if (s.length==0) {
-System.out.print("Total Consonants" + consonant.length() + consonant + ")");
-return 0;
-}
-Char currentChar = s.charAt(index);
-Int count = 0;
-if(isConsonant(currentChar)){
-	consonants+=currentChar+",";
-	count = 1;
-}
-return 1 + consonantCheck(consonant,s,index+1);
-//start at beginning of s, go through indexes
-	}
+public class Main {
+    // Method to check whether a character is a consonant
+    public static boolean isConsonant(char c) {
+        c = Character.toLowerCase(c);
+        return (c >= 'a' && c <= 'z') && !(c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u');
+    }
 
-public static void Main (String[]args){
-  String test1 = "A58*u7(($1ee&";
-  String test2 = "CSC530DaTaStrc";
-  consonantCheck("(",test1,0);
-  consonantCheck("(",test2,0);
-}
+    // Recursive method to count and collect consonants
+    public static int consonantCheck(String s, int index, int count, StringBuilder uniqueConsonants) {
+        // Base Case: Stop when we reach the end of the string
+        if (index >= s.length()) {
+            // Print the final output in the required format
+            System.out.println("Total consonants: " + count + " (" + uniqueConsonants + ")");
+            return count;
+        }
 
+        char currentChar = s.charAt(index); // Get the current character
+
+        // Check if it's a consonant
+        if (isConsonant(currentChar)) {
+            count++; 
+
+            // Convert to lowercase for case-insensitive uniqueness check
+            String lowerChar = Character.toString(Character.toLowerCase(currentChar));
+
+            // Add to the unique consonant list only if not already present
+            if (!uniqueConsonants.toString().toLowerCase().contains(lowerChar)) {
+                uniqueConsonants.append(currentChar).append(",");
+            }
+        }
+
+        // Recursive call to process the next character
+        return consonantCheck(s, index + 1, count, uniqueConsonants);
+    }
+
+    // Main method
+    public static void main(String[] args) {
+        String test1 = "A58*u7(($1ee&";  
+        String test2 = "CSC530DaTaStrc"; 
+
+        consonantCheck(test1, 0, 0, new StringBuilder());
+        consonantCheck(test2, 0, 0, new StringBuilder());
+    }
+}
